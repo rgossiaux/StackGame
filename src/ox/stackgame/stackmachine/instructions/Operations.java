@@ -1,7 +1,6 @@
 package ox.stackgame.stackmachine.instructions;
 
 import java.util.*;
-import java.lang.*;
 
 import ox.stackgame.stackmachine.StackMachine;
 import ox.stackgame.stackmachine.exceptions.StackRuntimeException;
@@ -102,22 +101,16 @@ public class Operations {
             protected boolean p(StackMachine machine) {
                 return true;
             } 
-
-            public List<Class<?>> argTypes() {
-                return typeList(StringStackValue.class);
-            }
         });
-
-        ht.put( "nop", new SeqOperation() {
-            public void apply(StackMachine m, StackValue<?> arg) {
-            }
-        } );
-
-        ht.put( "dump", new SeqOperation() {
-            public void apply( StackMachine m, StackValue< ? > arg ) {
-                m.dump();
-            }
-        } );
+        
+        ht.put("input", new SeqOperation() {
+	    @Override
+	    public void apply(StackMachine m, StackValue<?> arg)
+		    throws StackRuntimeException {
+		m.getStack().push(m.consumeInput());
+	    }
+            
+        });
     }
 
     public static Operation get(String name) {

@@ -3,7 +3,6 @@ package ox.stackgame.stackmachine;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
@@ -103,6 +102,30 @@ public class InstructionsTest {
 	machine.setStore(0, new IntStackValue(2));
 	machine.step();
 	assertEquals(new Integer(2), machine.getStack().pop().getValue());
+    }
+    
+    @Test
+    public void testInput() throws StackRuntimeException {
+	List<Instruction> instructions = new ArrayList<Instruction>();
+	instructions.add(new Instruction("input"));
+	List<StackValue<?>> input = new ArrayList<StackValue<?>>();
+	input.add(new IntStackValue(3));
+	StackMachine machine = new StackMachine(instructions, input);
+	machine.step();
+	assertEquals(new Integer(3), machine.getStack().pop().getValue());
+    }
+    
+    @Test
+    public void testOutput() throws StackRuntimeException {
+	List<Instruction> instructions = new ArrayList<Instruction>();
+	instructions.add(new Instruction("const", new IntStackValue(3)));
+	instructions.add(new Instruction("output"));
+	StackMachine machine = new StackMachine(instructions);
+	machine.step();
+	assertEquals(new Integer(3), machine.getStack().peek().getValue());
+	machine.step();
+	assertEquals(0, machine.getStack().size());
+	assertEquals(new Integer(3), null); //TODO
     }
     
 }
